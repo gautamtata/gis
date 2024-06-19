@@ -11,7 +11,7 @@ export async function* codeAction(
 	yield* sharedAction(
 		actionState,
 		wasAborted,
-		`${getServerProxyUrl()}/api/magic/actions/code`,
+		`${getServerProxyUrl()}/api/code`,
 		"code",
 	);
 }

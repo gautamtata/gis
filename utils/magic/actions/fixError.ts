@@ -11,7 +11,7 @@ export async function* fixErrorAction(
 	yield* sharedAction(
 		actionState,
 		wasAborted,
-		`${getServerProxyUrl()}/api/magic/actions/fixError`,
+		`${getServerProxyUrl()}/api/fixError`,
 		"code",
 	);
 }
