@@ -1,41 +1,40 @@
-import { NotebookFile } from "../../types/file.types";
-import { newUuid } from "../utils";
+import { NotebookFile } from '../../types/file.types';
+import { newUuid } from '../utils';
 
 // TODO add real PostHog Project
-export const PH_PROJECT_API_KEY =
-	"phc_Pqhxx9TL3YeiBss7OfaIMdj1K8X7kjzeUUg7XsM3zpP";
+export const PH_PROJECT_API_KEY = '';
 export const API_URL =
-	process.env.NODE_ENV == "production"
-		? "https://vizly-notebook-server.onrender.com"
-		: "http://localhost:5001";
+	process.env.NODE_ENV == 'production'
+		? 'https://vizly-notebook-server.onrender.com'
+		: 'http://localhost:5001';
 
-export const CELL_ACTIVE_COLOR = "var(--chakra-colors-orange-500)";
+export const CELL_ACTIVE_COLOR = 'var(--chakra-colors-orange-500)';
 
 export const SIDEPANEL_WIDTH = 350;
 export const SCROLL_TO_BOTTOM_THRESHOLD = 100;
 
-export const CHAT_PANEL_ID = "chat";
+export const CHAT_PANEL_ID = 'chat';
 
-export const FILESYSTEM_PANEL_ID = "filesystem";
+export const FILESYSTEM_PANEL_ID = 'filesystem';
 
-export const TERMINAL_PANEL_ID = "terminal";
+export const TERMINAL_PANEL_ID = 'terminal';
 
-export const SETTINGS_PANEL_ID = "settings";
+export const SETTINGS_PANEL_ID = 'settings';
 
 export const CONTEXT_WINDOW_SIZE = 3;
 
 export const OUTPUT_AREA_CSS = {
-	"&::-webkit-scrollbar": {
-		width: "4px",
-		height: "4px",
+	'&::-webkit-scrollbar': {
+		width: '4px',
+		height: '4px',
 	},
-	"&::-webkit-scrollbar-track": {
-		background: "var(--chakra-colors-gray-50)",
-		width: "6px",
+	'&::-webkit-scrollbar-track': {
+		background: 'var(--chakra-colors-gray-50)',
+		width: '6px',
 	},
-	"&::-webkit-scrollbar-thumb": {
-		background: "var(--chakra-colors-green-300)",
-		borderRadius: "24px",
+	'&::-webkit-scrollbar-thumb': {
+		background: 'var(--chakra-colors-green-300)',
+		borderRadius: '24px',
 	},
 };
 
@@ -50,17 +49,17 @@ export const MAX_MESSAGE_LENGTH = 4000;
 export const MAX_OUTPUT_LENGTH = 2000;
 
 export const SCROLL_CSS = {
-	"&::-webkit-scrollbar": {
-		width: "4px",
-		height: "4px",
+	'&::-webkit-scrollbar': {
+		width: '4px',
+		height: '4px',
 	},
-	"&::-webkit-scrollbar-track": {
-		background: "var(--chakra-colors-gray-50)",
-		width: "6px",
+	'&::-webkit-scrollbar-track': {
+		background: 'var(--chakra-colors-gray-50)',
+		width: '6px',
 	},
-	"&::-webkit-scrollbar-thumb": {
-		background: "var(--chakra-colors-orange-300)",
-		borderRadius: "24px",
+	'&::-webkit-scrollbar-thumb': {
+		background: 'var(--chakra-colors-orange-300)',
+		borderRadius: '24px',
 	},
 };
 
@@ -73,7 +72,7 @@ export const NEW_NOTEBOOK: () => NotebookFile = () => {
 		metadata: {
 			thread: {
 				id: id,
-				preferredLanguage: "",
+				preferredLanguage: '',
 			},
 		},
 		nbformat: 4,
@@ -81,8 +80,8 @@ export const NEW_NOTEBOOK: () => NotebookFile = () => {
 	};
 };
 
-export const START_HIDE_CURSOR = "[?25l";
-export const STOP_HIDE_CURSOR = "[?25h";
+export const START_HIDE_CURSOR = '[?25l';
+export const STOP_HIDE_CURSOR = '[?25h';
 
 export const MESSAGES_LOOKBACK_WINDOW = 10;
 export const MAX_SPREADSHEET_SIZE_TO_PREVIEW = 5 * 1024 * 1024;
