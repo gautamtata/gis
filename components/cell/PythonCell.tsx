@@ -17,7 +17,7 @@ import {
 	PlayCircleIcon,
 	StopCircleIcon,
 } from "../../assets/icons";
-import ConnectionManager from "../../services/connection/connectionManager";
+import ConnectionManager from "@/services/connection/connectionManager";
 import {
 	CELL_ACTIVE_COLOR,
 	CELL_GUTTER_WIDTH,

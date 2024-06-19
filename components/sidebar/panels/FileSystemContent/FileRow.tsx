@@ -1,4 +1,4 @@
-import { Icon } from '@chakra-ui/icon';
+import { Icon } from "@chakra-ui/icon";
 import {
 	useColorModeValue,
 	VStack,
@@ -10,7 +10,7 @@ import {
 	MenuList,
 	MenuItem,
 	Text,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 import {
 	FileIcon,
 	FolderIcon,
@@ -18,12 +18,12 @@ import {
 	PythonIcon,
 	ThreeDotsVerticalIcon,
 	TrashCanIcon,
-} from '../../../../assets/icons';
-import { ThreadFile } from '../../../../types/file.types';
-import { getFileName } from '../../../../utils/utils';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useNotebookStore } from '../../../notebook/store/NotebookStore';
-import { useFileViewModalState } from '../../../modals/file-view/FileViewModalStore';
+} from "../../../../assets/icons";
+import { ThreadFile } from "@/types/file.types";
+import { getFileName } from "../../../../utils/utils";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useNotebookStore } from "../../../notebook/store/NotebookStore";
+import { useFileViewModalState } from "../../../modals/file-view/FileViewModalStore";
 
 export const FileRow = ({
 	file,
@@ -34,27 +34,29 @@ export const FileRow = ({
 }) => {
 	const searchParams = useSearchParams();
 	const { navigateToPath } = useNotebookStore.getState();
-	const selectedFileBgColor = useColorModeValue('orange.100', 'orange.800');
+	const selectedFileBgColor = useColorModeValue("orange.100", "orange.800");
 
 	const fileName = getFileName(file);
-	const fileSelected = fileName === searchParams.get('path');
+	const fileSelected = fileName === searchParams.get("path");
 
 	const fetchIcon = (file: ThreadFile) => {
-		if (file.type === 'directory') {
-			return <Icon as={FolderIcon} color='orange.300' />;
-		} else if (file.type === 'notebook') {
-			return <Icon as={JupyterIcon} color='orange.300' />;
+		if (file.type === "directory") {
+			return <Icon as={FolderIcon} color="orange.300" />;
+		} else if (file.type === "notebook") {
+			return <Icon as={JupyterIcon} color="orange.300" />;
 		}
-		return <Icon as={FileIcon} color='orange.300' />;
+		return <Icon as={FileIcon} color="orange.300" />;
 	};
 
 	const onClick = () => {
-		if (file.type === 'notebook') {
+		if (file.type === "notebook") {
 			// Since searchParams is readonly, use a navigation function to change the URL
-			const newSearchParams = new URLSearchParams(searchParams.toString());
-			newSearchParams.set('path', file.path);
+			const newSearchParams = new URLSearchParams(
+				searchParams.toString(),
+			);
+			newSearchParams.set("path", file.path);
 			navigateToPath(`/?${newSearchParams.toString()}`);
-		} else if (file.type === 'directory') {
+		} else if (file.type === "directory") {
 			navigateToPath(file.path);
 		} else {
 			useFileViewModalState.getState().setFile(file);
@@ -63,25 +65,25 @@ export const FileRow = ({
 
 	return (
 		<VStack
-			w={'100%'}
-			alignItems='center'
-			justifyContent='space-between'
-			py='0'
-			px='12px'
-			bg={fileSelected ? selectedFileBgColor : 'transparent'}
+			w={"100%"}
+			alignItems="center"
+			justifyContent="space-between"
+			py="0"
+			px="12px"
+			bg={fileSelected ? selectedFileBgColor : "transparent"}
 			onClick={onClick}
-			cursor={'pointer'}
-			fontFamily={'Space Grotesk'}
+			cursor={"pointer"}
+			fontFamily={"Space Grotesk"}
 		>
-			<HStack w={'100%'} justifyContent={'space-between'} fontSize={'md'}>
+			<HStack w={"100%"} justifyContent={"space-between"} fontSize={"md"}>
 				<HStack
-					width='100%'
+					width="100%"
 					flex={1}
-					alignItems={'center'}
-					justifyContent={'flex-start'}
-					fontWeight={'semibold'}
-					maxWidth='70%'
-					fontSize={'smaller'}
+					alignItems={"center"}
+					justifyContent={"flex-start"}
+					fontWeight={"semibold"}
+					maxWidth="70%"
+					fontSize={"smaller"}
 				>
 					{fetchIcon(file)}
 					<Tooltip label={fileName}>
@@ -105,14 +107,14 @@ const MoreOptionsMenu = ({
 		<Menu>
 			<MenuButton
 				as={Button}
-				variant='ghost'
-				colorScheme='orange'
-				size='xs'
+				variant="ghost"
+				colorScheme="orange"
+				size="xs"
 				m={0}
 				p={0}
 				onClick={(e) => e.stopPropagation()}
 			>
-				<Icon as={ThreeDotsVerticalIcon} color='gray.500' />
+				<Icon as={ThreeDotsVerticalIcon} color="gray.500" />
 			</MenuButton>
 			<MenuList>
 				<MenuItem
@@ -121,7 +123,7 @@ const MoreOptionsMenu = ({
 						deleteItem(file);
 					}}
 					icon={<TrashCanIcon />}
-					color='red'
+					color="red"
 				>
 					<Text>Delete</Text>
 				</MenuItem>

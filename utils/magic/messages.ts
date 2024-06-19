@@ -1,8 +1,8 @@
 import { IError, IOutput, IStream } from "@jupyterlab/nbformat";
 import { captureException } from "@sentry/nextjs";
-import { useNotebookStore } from "../../components/notebook/store/NotebookStore";
-import ConnectionManager from "../../services/connection/connectionManager";
-import { ThreadCell } from "../../types/code.types";
+import { useNotebookStore } from "@/components/notebook/store/NotebookStore";
+import ConnectionManager from "@/services/connection/connectionManager";
+import { ThreadCell } from "@/types/code.types";
 import { MAX_OUTPUT_LENGTH } from "../constants/constants";
 import {
 	extractErrorLineWithRegex,
@@ -277,14 +277,14 @@ export const formatCellsAsMessages = (
 								return limitStringLength(
 									output,
 									MAX_OUTPUT_LENGTH /
-										mergedAndInterleavedOutputs.length,
+									mergedAndInterleavedOutputs.length,
 								);
 							} else if (output.errorOccurred) {
 								// Limit the error string
 								output.output.error = limitStringLength(
 									output.output.error,
 									MAX_OUTPUT_LENGTH /
-										mergedAndInterleavedOutputs.length,
+									mergedAndInterleavedOutputs.length,
 								);
 							}
 

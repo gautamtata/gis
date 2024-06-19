@@ -14,7 +14,7 @@ import { jupyterTheme } from "./theme";
 
 import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 import CodeMirrorMerge, { CodeMirrorMergeRef } from "react-codemirror-merge";
-import ConnectionManager from "../../../services/connection/connectionManager";
+import ConnectionManager from "@/services/connection/connectionManager";
 import { multilineStringToString } from "../../../utils/utils";
 import { enableEditMode } from "../actions/actions";
 import useCellStore from "../store/CellStore";

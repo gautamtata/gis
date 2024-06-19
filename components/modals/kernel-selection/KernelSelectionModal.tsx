@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import ConnectionManager, {
 	useConnectionManagerStore,
-} from "../../../services/connection/connectionManager";
+} from "@/services/connection/connectionManager";
 import { useNotebookStore } from "../../notebook/store/NotebookStore";
 
 const NO_KERNEL = "No kernel";

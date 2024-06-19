@@ -1,4 +1,4 @@
-import { ActionState, NoterousMessage } from "../../../types/messages";
+import { ActionState, NoterousMessage } from "@/types/messages";
 import { limitMessages } from "./promptUtils";
 
 export const formatMessages = (

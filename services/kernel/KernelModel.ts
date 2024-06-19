@@ -12,8 +12,8 @@ import { ISessionConnection } from "@jupyterlab/services/lib/session/session";
 import { PartialJSONObject } from "@lumino/coreutils/types";
 import { ISignal, Signal } from "@lumino/signaling";
 import { captureException } from "@sentry/nextjs";
-import { useNotebookStore } from "../../components/notebook/store/NotebookStore";
-import { ThreadCell } from "../../types/code.types";
+import { useNotebookStore } from "@/components/notebook/store/NotebookStore";
+import { ThreadCell } from "@/types/code.types";
 import { multilineStringToString } from "../../utils/utils";
 import TextEmbeddingModel from "../embedding/TextEmbedder";
 
@@ -151,7 +151,7 @@ export class KernelModel {
 		return this.taskQueue;
 	}
 
-	preProcessCellExecutionOperations(code: string): void {}
+	preProcessCellExecutionOperations(code: string): void { }
 
 	async postCellExecutionOperations(
 		cell: ThreadCell,

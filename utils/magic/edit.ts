@@ -1,10 +1,10 @@
 import useCellStore, {
 	CellStatus,
-} from "../../components/cell/store/CellStore";
-import { useNotebookStore } from "../../components/notebook/store/NotebookStore";
-import { useSettingsStore } from "../../components/settings/SettingsStore";
-import ConnectionManager from "../../services/connection/connectionManager";
-import { ThreadCell } from "../../types/code.types";
+} from "@/components/cell/store/CellStore";
+import { useNotebookStore } from "@/components/notebook/store/NotebookStore";
+import { useSettingsStore } from "@/components/settings/SettingsStore";
+import ConnectionManager from "@/services/connection/connectionManager";
+import { ThreadCell } from "@/types/code.types";
 import { mostRelevantCellsForQuery } from "../embeddings";
 import { makeStreamingFunctionRequest } from "../streaming";
 import { getAppTheme, multilineStringToString } from "../utils";
@@ -17,7 +17,7 @@ export const editCell = async (cell: ThreadCell, query: string) => {
 	const setCellStatus = useCellStore.getState().setCellStatus;
 	setCellStatus(cell.id as string, CellStatus.Generating);
 	const stream = makeStreamingFunctionRequest({
-		url: `${getServerProxyUrl()}/api/magic/actions/editCell`,
+		url: `${getServerProxyUrl()}/api/editCell`,
 		method: "POST",
 		payload: {
 			userRequest: query,

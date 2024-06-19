@@ -1,5 +1,5 @@
-import ConnectionManager from "../../../services/connection/connectionManager";
-import { ThreadFile } from "../../../types/file.types";
+import ConnectionManager from "@/services/connection/connectionManager";
+import { ThreadFile } from "@/types/file.types";
 import { useNotebookStore } from "../../notebook/store/NotebookStore";
 
 export function refresh(path: string) {

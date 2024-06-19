@@ -1,4 +1,4 @@
-import { MarkdownIcon, PythonIcon, SparklesIcon } from "../assets/icons";
+import { MarkdownIcon, PythonIcon } from "../assets/icons";
 
 const cellTypeConfigs = [
 	{ key: "code", icon: <PythonIcon />, label: "Python" },

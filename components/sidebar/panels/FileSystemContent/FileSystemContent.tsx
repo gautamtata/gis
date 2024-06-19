@@ -1,4 +1,4 @@
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon } from "@chakra-ui/icons";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -10,21 +10,21 @@ import {
 	Link,
 	Tooltip,
 	VStack,
-} from '@chakra-ui/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+} from "@chakra-ui/react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
 	FolderIcon,
 	RefreshIcon,
 	ToggleSidebar,
-} from '../../../../assets/icons';
-import ConnectionManager from '../../../../services/connection/connectionManager';
-import { ThreadFile } from '../../../../types/file.types';
-import { isPlatformMac } from '../../../../utils/utils';
-import Spinner from '../../../misc/Spinner';
-import { useNotebookStore } from '../../../notebook/store/NotebookStore';
+} from "../../../../assets/icons";
+import ConnectionManager from "@/services/connection/connectionManager";
+import { ThreadFile } from "@/types/file.types";
+import { isPlatformMac } from "../../../../utils/utils";
+import Spinner from "../../../misc/Spinner";
+import { useNotebookStore } from "../../../notebook/store/NotebookStore";
 
-import SidebarIcon from '../../buttons/SidebarIcon';
-import { FileRow } from './FileRow';
+import SidebarIcon from "../../buttons/SidebarIcon";
+import { FileRow } from "./FileRow";
 
 const FilesPanel = ({
 	handleDeleteItem,
@@ -42,48 +42,53 @@ const FilesPanel = ({
 
 	return (
 		<VStack
-			width='100%'
-			overflowY={'auto'}
-			display={'flex'}
-			flex='1'
-			flexDirection={'column'}
+			width="100%"
+			overflowY={"auto"}
+			display={"flex"}
+			flex="1"
+			flexDirection={"column"}
 			gap={0}
-			height={'50%'}
+			height={"50%"}
 		>
-			<VStack w={'100%'} gap={0} padding={'12px'}>
-				<HStack justify={'space-between'} width={'100%'}>
+			<VStack w={"100%"} gap={0} padding={"12px"}>
+				<HStack justify={"space-between"} width={"100%"}>
 					<HStack>
 						<Tooltip
-							fontSize='small'
+							fontSize="small"
 							hasArrow
-							borderRadius={'sm'}
-							placement='right'
+							borderRadius={"sm"}
+							placement="right"
 							label={`Create a new notebook`}
 						>
 							<Button
-								size='xs'
-								variant={'ghost'}
+								size="xs"
+								variant={"ghost"}
 								leftIcon={<AddIcon />}
-								colorScheme='orange'
-								fontFamily={'Space Grotesk'}
+								colorScheme="orange"
+								fontFamily={"Space Grotesk"}
 								onClick={() => {
 									// Clearing the file contents will go to the launcher
-									useNotebookStore.getState().setFileContents(undefined);
+									useNotebookStore
+										.getState()
+										.setFileContents(undefined);
 
 									// Create a new URLSearchParams object based on the current searchParams
 									const newSearchParams = new URLSearchParams(
-										window.location.search
+										window.location.search,
 									);
-									newSearchParams.delete('path'); // Remove the 'path' parameter
+									newSearchParams.delete("path"); // Remove the 'path' parameter
 
 									// Convert URLSearchParams to a plain object
-									const queryObject = Object.fromEntries(newSearchParams);
+									const queryObject =
+										Object.fromEntries(newSearchParams);
 
 									// Use router.push to update the URL without the 'path' parameter
 									const queryString = new URLSearchParams(
-										queryObject
+										queryObject,
 									).toString();
-									router.push(`${window.location.pathname}?${queryString}`);
+									router.push(
+										`${window.location.pathname}?${queryString}`,
+									);
 								}}
 							>
 								New
@@ -91,16 +96,16 @@ const FilesPanel = ({
 						</Tooltip>
 
 						<Tooltip
-							fontSize='small'
+							fontSize="small"
 							hasArrow
-							borderRadius={'sm'}
-							placement='top'
+							borderRadius={"sm"}
+							placement="top"
 							label={`Refresh the file system.`}
 						>
 							<Button
-								size='xs'
-								colorScheme='orange'
-								variant={'ghost'}
+								size="xs"
+								colorScheme="orange"
+								variant={"ghost"}
 								leftIcon={<RefreshIcon />}
 								onClick={() => {
 									refreshFiles(path);
@@ -112,31 +117,38 @@ const FilesPanel = ({
 					</HStack>
 				</HStack>
 			</VStack>
-			{path != '/' && (
-				<HStack w={'100%'} p={'4px'} px={'12px'} overflowX={'auto'}>
-					<Breadcrumb separator='/' fontSize={'xs'} w={'100%'}>
-						<BreadcrumbItem key='home'>
+			{path != "/" && (
+				<HStack w={"100%"} p={"4px"} px={"12px"} overflowX={"auto"}>
+					<Breadcrumb separator="/" fontSize={"xs"} w={"100%"}>
+						<BreadcrumbItem key="home">
 							<BreadcrumbLink
-								size={'sm'}
-								variant={'ghost'}
-								aria-label='Home'
+								size={"sm"}
+								variant={"ghost"}
+								aria-label="Home"
 								as={IconButton}
-								onClick={() => navigateToPath('/')}
+								onClick={() => navigateToPath("/")}
 								icon={<FolderIcon />}
-								color={'orange.400'}
+								color={"orange.400"}
 							/>
 						</BreadcrumbItem>
 						{path
-							.split('/')
-							.filter((i) => i !== '')
+							.split("/")
+							.filter((i) => i !== "")
 							.map((i, index, array) => {
 								const isLastItem = index === array.length - 1;
-								const currentPath = `/${array.slice(0, index + 1).join('/')}`;
+								const currentPath = `/${array
+									.slice(0, index + 1)
+									.join("/")}`;
 								return (
-									<BreadcrumbItem key={i} isCurrentPage={isLastItem}>
+									<BreadcrumbItem
+										key={i}
+										isCurrentPage={isLastItem}
+									>
 										<BreadcrumbLink
 											as={Link}
-											onClick={() => navigateToPath(currentPath)}
+											onClick={() =>
+												navigateToPath(currentPath)
+											}
 										>
 											{i}
 										</BreadcrumbLink>
@@ -146,17 +158,24 @@ const FilesPanel = ({
 					</Breadcrumb>
 				</HStack>
 			)}
-			<VStack overflowY={'auto'} width='100%' gap={0.5}>
+			<VStack overflowY={"auto"} width="100%" gap={0.5}>
 				{isFetchingFiles && files.length === 0 ? (
-					<Spinner isSpinning={true} color='orange.500' size='md' mt='4' />
+					<Spinner
+						isSpinning={true}
+						color="orange.500"
+						size="md"
+						mt="4"
+					/>
 				) : (
-					(files as ThreadFile[]).map((file: ThreadFile, i: number) => (
-						<FileRow
-							key={`${file.name}-${i}`}
-							file={file}
-							deleteItem={handleDeleteItem}
-						/>
-					))
+					(files as ThreadFile[]).map(
+						(file: ThreadFile, i: number) => (
+							<FileRow
+								key={`${file.name}-${i}`}
+								file={file}
+								deleteItem={handleDeleteItem}
+							/>
+						),
+					)
 				)}
 			</VStack>
 		</VStack>
@@ -175,7 +194,7 @@ export const FileSystemContent = ({
 		try {
 			await connectionManager.serviceManager!.contents.delete(file.path);
 		} catch (error) {
-			console.error('Error deleting item: ', error);
+			console.error("Error deleting item: ", error);
 			return Promise.resolve();
 		}
 
@@ -183,31 +202,33 @@ export const FileSystemContent = ({
 	};
 
 	return (
-		<VStack width='100%' height='100%' gap={0}>
+		<VStack width="100%" height="100%" gap={0}>
 			<HStack
-				width='100%'
-				display={'flex'}
-				flex='0 0 auto'
-				justifyContent={'space-between'}
-				px={'12px'}
-				pt={'12px'}
-				pb={'4px'}
+				width="100%"
+				display={"flex"}
+				flex="0 0 auto"
+				justifyContent={"space-between"}
+				px={"12px"}
+				pt={"12px"}
+				pb={"4px"}
 			>
-				<Heading fontSize='smaller' textTransform={'uppercase'}>
+				<Heading fontSize="smaller" textTransform={"uppercase"}>
 					Files
 				</Heading>
 				<SidebarIcon
-					label={`Close sidebar (${isPlatformMac() ? '⌘ + B' : 'Ctrl + B'})`}
+					label={`Close sidebar (${
+						isPlatformMac() ? "⌘ + B" : "Ctrl + B"
+					})`}
 					icon={<ToggleSidebar />}
 					onClick={handleCloseSidebar}
 				/>
 			</HStack>
 			<VStack
-				width='100%'
-				overflow='hidden'
-				display={'flex'}
-				flex='1'
-				flexDirection={'column'}
+				width="100%"
+				overflow="hidden"
+				display={"flex"}
+				flex="1"
+				flexDirection={"column"}
 				gap={0}
 			>
 				<FilesPanel

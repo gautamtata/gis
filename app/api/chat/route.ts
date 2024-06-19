@@ -7,7 +7,7 @@ import {
     ChatCompletionMessageParam,
 } from "openai/resources/chat/completions";
 import { Stream } from "openai/streaming";
-import { ChatMessage } from "../../../types/messages";
+import { ChatMessage } from "@/types/messages";
 import { ModelInformation, getModelForRequest } from "@/utils/_shared/model";
 import { getOpenAIClient } from "@/utils/_shared/openai";
 import { getChatContextPrompt } from "@/utils/_shared/promptUtils";

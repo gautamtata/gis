@@ -5,7 +5,7 @@ import {
 } from "@jupyterlab/services";
 import { ConnectionStatus } from "@jupyterlab/services/lib/kernel/kernel";
 import { ISessionConnection } from "@jupyterlab/services/lib/session/session";
-import { useNotebookStore } from "../../components/notebook/store/NotebookStore";
+import { useNotebookStore } from "@/components/notebook/store/NotebookStore";
 import { trackEventData } from "../../utils/posthog";
 import ConnectionManager, {
 	useConnectionManagerStore,

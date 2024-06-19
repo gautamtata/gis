@@ -1,7 +1,7 @@
 import { captureException } from "@sentry/nextjs";
-import { useNotebookStore } from "../../components/notebook/store/NotebookStore";
-import ConnectionManager from "../../services/connection/connectionManager";
-import { ThreadFile } from "../../types/file.types";
+import { useNotebookStore } from "@/components/notebook/store/NotebookStore";
+import ConnectionManager from "@/services/connection/connectionManager";
+import { ThreadFile } from "@/types/file.types";
 
 export function refresh(path: string) {
 	return getPathContents(path);

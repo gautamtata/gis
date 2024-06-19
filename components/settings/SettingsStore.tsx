@@ -2,7 +2,7 @@ import { captureException, captureMessage } from "@sentry/nextjs";
 import { create } from "zustand";
 import ConnectionManager, {
 	useConnectionManagerStore,
-} from "../../services/connection/connectionManager";
+} from "@/services/connection/connectionManager";
 import { API_URL } from "../../utils/constants/constants";
 
 const SETTINGS_FILE_NAME = "settings.json";

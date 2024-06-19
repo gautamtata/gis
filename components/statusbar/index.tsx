@@ -17,7 +17,7 @@ import {
 } from "../../assets/icons";
 import ConnectionManager, {
 	useConnectionManagerStore,
-} from "../../services/connection/connectionManager";
+} from "@/services/connection/connectionManager";
 
 import { trackClickEvent } from "../../utils/posthog";
 import { useNotebookStore } from "../notebook/store/NotebookStore";

@@ -1,15 +1,15 @@
 import { captureException } from "@sentry/nextjs";
-import useCellStore from "../../components/cell/store/CellStore";
+import useCellStore from "@/components/cell/store/CellStore";
 import {
 	MagicInputSelections,
 	useMagicInputStore,
-} from "../../components/input/MagicInputStore";
-import { useNotebookStore } from "../../components/notebook/store/NotebookStore";
-import { useSettingsStore } from "../../components/settings/SettingsStore";
-import { useChatStore } from "../../components/sidebar/chat/store/ChatStore";
+} from "@/components/input/MagicInputStore";
+import { useNotebookStore } from "@/components/notebook/store/NotebookStore";
+import { useSettingsStore } from "@/components/settings/SettingsStore";
+import { useChatStore } from "@/components/sidebar/chat/store/ChatStore";
 import ConnectionManager, {
 	useConnectionManagerStore,
-} from "../../services/connection/connectionManager";
+} from "@/services/connection/connectionManager";
 import { MESSAGES_LOOKBACK_WINDOW } from "../constants/constants";
 import { trackEventData } from "../posthog";
 import {

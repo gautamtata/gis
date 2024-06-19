@@ -1,42 +1,38 @@
-import { ICell, IMarkdownCell, IOutput } from '@jupyterlab/nbformat';
-import { PartialJSONObject } from '@lumino/coreutils/types';
-import { captureException } from '@sentry/nextjs';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { NextRouter } from 'next/router';
-import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { v4 as uuidv4 } from 'uuid';
-import { temporal } from 'zundo';
-import { create } from 'zustand';
-import useApiCallStore from '../../../hooks/useApiCallStore';
+import { ICell, IMarkdownCell, IOutput } from "@jupyterlab/nbformat";
+import { PartialJSONObject } from "@lumino/coreutils/types";
+import { captureException } from "@sentry/nextjs";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { NextRouter } from "next/router";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { v4 as uuidv4 } from "uuid";
+import { temporal } from "zundo";
+import { create } from "zustand";
+import useApiCallStore from "../../../hooks/useApiCallStore";
 import ConnectionManager, {
 	useConnectionManagerStore,
-} from '../../../services/connection/connectionManager';
-import { standaloneToast } from '../../../theme';
-import { ThreadCell } from '../../../types/code.types';
-import {
-	NotebookFile,
-	NotebookMetadata,
-	ThreadFile,
-} from '../../../types/file.types';
-import { magicQuery } from '../../../utils/magic/magicQuery';
-import { trackEventData } from '../../../utils/posthog';
-import { newUuid } from '../../../utils/utils';
-import { enableCommandMode } from '../../cell/actions/actions';
-import { refresh } from '../../sidebar/filesystem/FileSystemToolbarUtils';
-import debounce from 'lodash.debounce';
-export type ICellTypes = 'markdown' | 'code' | 'rawNB';
-export type NotebookMode = 'command' | 'edit';
+} from "@/services/connection/connectionManager";
+import { standaloneToast } from "../../../theme";
+import { ThreadCell } from "@/types/code.types";
+import { NotebookFile, NotebookMetadata, ThreadFile } from "@/types/file.types";
+import { magicQuery } from "../../../utils/magic/magicQuery";
+import { trackEventData } from "../../../utils/posthog";
+import { newUuid } from "../../../utils/utils";
+import { enableCommandMode } from "../../cell/actions/actions";
+import { refresh } from "../../sidebar/filesystem/FileSystemToolbarUtils";
+import debounce from "lodash.debounce";
+export type ICellTypes = "markdown" | "code" | "rawNB";
+export type NotebookMode = "command" | "edit";
 export type ExecutionCountTypes = number | null;
 
 export interface MarkdownCell extends IMarkdownCell {
 	rendered: boolean;
-	cell_type: 'markdown';
+	cell_type: "markdown";
 }
 
 export const createNewCell = (): ICell => ({
 	id: uuidv4(),
-	cell_type: 'code',
-	source: '',
+	cell_type: "code",
+	source: "",
 	outputs: [],
 	metadata: {},
 	execution_count: null,
@@ -75,7 +71,7 @@ export interface INotebookStore {
 	getNotebookPath: (notebook?: NotebookFile) => string;
 	getNotebookName: () => string | undefined;
 	setNotebookName: (
-		newName: string
+		newName: string,
 	) => Promise<{ success: boolean; error: string | null }>;
 	setNotebookSettings: () => Promise<void>;
 
@@ -100,11 +96,11 @@ export interface INotebookStore {
 		type?: ICellTypes,
 		mode?: NotebookMode,
 		group?: string,
-		user?: 'user' | 'assistant',
-		action?: string
+		user?: "user" | "assistant",
+		action?: string,
 	) => ICell;
 	setCellSource: (cellId: string, newSource: string) => void;
-	setCellUser: (cellId: string, user: 'user' | 'assistant') => void;
+	setCellUser: (cellId: string, user: "user" | "assistant") => void;
 	setActiveCellSource: (newSource: string) => void;
 	deleteCell: (cellId: string) => void;
 	deleteActiveCell: () => void;
@@ -112,7 +108,7 @@ export interface INotebookStore {
 	setCellGroup: (id: string, group: string) => void;
 	setCellOutputs: (cellId: string, newOutputs: IOutput[]) => void;
 	addCellOutput: (cellId: string, newOutput: IOutput) => void;
-	moveCell: (direction: 'up' | 'down') => void;
+	moveCell: (direction: "up" | "down") => void;
 	resetState: () => void;
 	clearNotebook: () => void;
 	clearCellOutputs: (cellId: string) => void;
@@ -143,19 +139,19 @@ export interface INotebookStore {
 	createNewNotebook: (
 		kernelSelection?: string,
 		router?: AppRouterInstance,
-		pathname?: string
+		pathname?: string,
 	) => void;
 	selectNotebook: (
 		notebook: NotebookFile,
 		kernelSelection?: string,
 		router?: AppRouterInstance,
-		pathname?: string
+		pathname?: string,
 	) => NotebookFile;
 	handleNotebookClick: (
 		notebookFile: ThreadFile,
 		router?: AppRouterInstance,
 		pathname?: string,
-		searchParams?: URLSearchParams // Include this parameter in the interface
+		searchParams?: URLSearchParams, // Include this parameter in the interface
 	) => Promise<void>;
 	navigateToPath: (path: string) => void;
 	handleSave: () => void;
@@ -172,7 +168,7 @@ export const useNotebookStore = create<INotebookStore>()(
 	temporal(
 		(set, get) =>
 			({
-				path: '/',
+				path: "/",
 				notebooks: [],
 				files: [],
 				selectedNotebook: undefined,
@@ -198,7 +194,9 @@ export const useNotebookStore = create<INotebookStore>()(
 							}
 							const sortedContent = contents.sort((a, b) => {
 								// First, sort by type
-								const typeComparison = a.type.localeCompare(b.type);
+								const typeComparison = a.type.localeCompare(
+									b.type,
+								);
 
 								if (typeComparison !== 0) {
 									return typeComparison;
@@ -214,7 +212,10 @@ export const useNotebookStore = create<INotebookStore>()(
 						})
 						.catch((error) => {
 							captureException(error);
-							console.error('Ran into error while navigating to path: ', error);
+							console.error(
+								"Ran into error while navigating to path: ",
+								error,
+							);
 							return [] as ThreadFile[];
 						})
 						.finally(() => {
@@ -226,25 +227,30 @@ export const useNotebookStore = create<INotebookStore>()(
 				deleteFile: async (file: ThreadFile) => {
 					const { path } = get();
 
-					const isFile = 'last_modified' in file;
+					const isFile = "last_modified" in file;
 					trackEventData(
-						isFile ? '[Files] Deleting File' : '[Files] Deleting Notebook'
+						isFile
+							? "[Files] Deleting File"
+							: "[Files] Deleting Notebook",
 					);
 					try {
-						const connectionManager = ConnectionManager.getInstance();
-						await connectionManager.serviceManager!.contents.delete(file.name);
+						const connectionManager =
+							ConnectionManager.getInstance();
+						await connectionManager.serviceManager!.contents.delete(
+							file.name,
+						);
 
 						get().refreshFiles(path);
 
 						standaloneToast({
-							title: 'File deleted',
+							title: "File deleted",
 							description: `This file (${file.name}) has been deleted.`,
-							status: 'success',
+							status: "success",
 							duration: 5000,
 							isClosable: true,
 						});
 					} catch (error) {
-						console.error('Error deleting item: ', error);
+						console.error("Error deleting item: ", error);
 						return Promise.resolve();
 					} finally {
 						get().refreshFiles(path, true);
@@ -257,7 +263,7 @@ export const useNotebookStore = create<INotebookStore>()(
 						isLoadingNotebook: false,
 					}),
 				cells: [],
-				notebookMode: 'command',
+				notebookMode: "command",
 				activeCellIndex: 0,
 				executingCells: new Set(),
 				fileContents: undefined,
@@ -281,24 +287,27 @@ export const useNotebookStore = create<INotebookStore>()(
 							activeCellIndex: 0,
 						});
 					} else {
-						let notebookMode = 'edit' as NotebookMode;
+						let notebookMode = "edit" as NotebookMode;
 						const cells = fileContents?.cells ?? [];
 
 						// If the first cell is markdown, begin the notebook in command mode. This allows for first markdown cell to be rendered
 						if (
 							cells &&
 							cells.length > 0 &&
-							cells[0].cell_type === 'markdown'
+							cells[0].cell_type === "markdown"
 						) {
-							notebookMode = 'command';
+							notebookMode = "command";
 						}
 
 						set({
 							fileContents: fileContents,
 							cells: cells.map((cell) => {
-								let user = 'assistant';
-								if (cell.cell_type === 'markdown') {
-									get().setMarkdownCellRendered(cell.id as string, true);
+								let user = "assistant";
+								if (cell.cell_type === "markdown") {
+									get().setMarkdownCellRendered(
+										cell.id as string,
+										true,
+									);
 								}
 
 								return {
@@ -307,7 +316,8 @@ export const useNotebookStore = create<INotebookStore>()(
 									metadata: {
 										...cell.metadata,
 										thread: {
-											...(cell.metadata.thread as PartialJSONObject),
+											...(cell.metadata
+												.thread as PartialJSONObject),
 											ran: false,
 											user: user,
 										},
@@ -370,7 +380,7 @@ export const useNotebookStore = create<INotebookStore>()(
 					if (!path) {
 						return undefined;
 					}
-					return path.split('/').pop();
+					return path.split("/").pop();
 				},
 				setNotebookName: async (newName: string) => {
 					return ConnectionManager.getInstance()
@@ -382,10 +392,10 @@ export const useNotebookStore = create<INotebookStore>()(
 				},
 				getNotebookId: (notebook?: NotebookFile) => {
 					// Returns the current notebook's ID (if it exists) or the provided notebook's ID if provided
-					console.log('getNotebookById');
+					console.log("getNotebookById");
 					console.log(notebook);
 					console.log(get().selectedNotebook);
-					return '123';
+					return "123";
 				},
 				setNotebookId: (notebookId: string) => {
 					const metadata = get().metadata;
@@ -447,10 +457,13 @@ export const useNotebookStore = create<INotebookStore>()(
 					return kernelId;
 				},
 				getNotebookPath: (searchParams: URLSearchParams) => {
-					return searchParams?.get('path') || '';
+					return searchParams?.get("path") || "";
 				},
 				clampIndex: (index: number, max?: number) => {
-					return Math.min(Math.max(index, 0), max ?? get().cells.length - 1);
+					return Math.min(
+						Math.max(index, 0),
+						max ?? get().cells.length - 1,
+					);
 				},
 				getCellIndexById: (id: string) => {
 					const { cells } = get();
@@ -471,7 +484,7 @@ export const useNotebookStore = create<INotebookStore>()(
 						userAbortedMagicQueryController: new AbortController(),
 					});
 
-					trackEventData('[MagicQuery] submitted');
+					trackEventData("[MagicQuery] submitted");
 
 					const shouldContinue = useApiCallStore
 						.getState()
@@ -515,7 +528,7 @@ export const useNotebookStore = create<INotebookStore>()(
 					});
 					get().handleSave();
 				},
-				setCellUser: (cellId: string, user: 'user' | 'assistant') => {
+				setCellUser: (cellId: string, user: "user" | "assistant") => {
 					const index = get().getCellIndexById(cellId);
 					if (index === -1) {
 						return;
@@ -571,7 +584,7 @@ export const useNotebookStore = create<INotebookStore>()(
 					const cells = [...get().cells];
 					let index = get().getCellIndexById(cellId);
 
-					trackEventData('[NOTEBOOK] delete cell');
+					trackEventData("[NOTEBOOK] delete cell");
 
 					if (cells.length === 1) {
 						const newCell = createNewCell();
@@ -598,7 +611,7 @@ export const useNotebookStore = create<INotebookStore>()(
 					const cells = [...get().cells];
 					const clampedIndex = get().clampIndex(
 						activeCellIndex,
-						Math.max(0, cells.length - 2)
+						Math.max(0, cells.length - 2),
 					);
 
 					if (cells.length === 1) {
@@ -627,9 +640,9 @@ export const useNotebookStore = create<INotebookStore>()(
 						// Clone the cells array
 						const updatedCells = [...state.cells];
 
-						if (newType === 'markdown') {
-							delete updatedCells[index]['outputs'];
-							delete updatedCells[index]['execution_count'];
+						if (newType === "markdown") {
+							delete updatedCells[index]["outputs"];
+							delete updatedCells[index]["execution_count"];
 						}
 
 						// Update the code of the cell at the specified index
@@ -650,7 +663,7 @@ export const useNotebookStore = create<INotebookStore>()(
 						return;
 					}
 					const cell = get().cells[index];
-					if (cell.cell_type == 'markdown') {
+					if (cell.cell_type == "markdown") {
 						// Don't set output on markdown cells otherwise will fail verification
 						return;
 					}
@@ -710,7 +723,10 @@ export const useNotebookStore = create<INotebookStore>()(
 						};
 					});
 				},
-				setExecutionCount: (cellId: string, count: ExecutionCountTypes) => {
+				setExecutionCount: (
+					cellId: string,
+					count: ExecutionCountTypes,
+				) => {
 					const index = get().getCellIndexById(cellId);
 					if (index == -1) {
 						return;
@@ -785,11 +801,11 @@ export const useNotebookStore = create<INotebookStore>()(
 				addCell: (source?: string, type?: ICellTypes) => {
 					let newCell: ICell | MarkdownCell;
 
-					if (type === 'markdown') {
+					if (type === "markdown") {
 						newCell = {
 							...createNewCell(),
-							source: source || '',
-							cell_type: 'markdown',
+							source: source || "",
+							cell_type: "markdown",
 							metadata: {
 								...createNewCell().metadata,
 								rendered: false,
@@ -798,12 +814,12 @@ export const useNotebookStore = create<INotebookStore>()(
 					} else {
 						newCell = {
 							...createNewCell(),
-							source: source || '',
-							cell_type: type || 'code',
+							source: source || "",
+							cell_type: type || "code",
 						};
 					}
 
-					trackEventData('[NOTEBOOK] Added cell', {
+					trackEventData("[NOTEBOOK] Added cell", {
 						cellType: newCell.cell_type,
 					});
 
@@ -818,12 +834,15 @@ export const useNotebookStore = create<INotebookStore>()(
 
 					return newCell;
 				},
-				moveCell: (direction: 'up' | 'down') => {
+				moveCell: (direction: "up" | "down") => {
 					const { cells, activeCellIndex } = get();
 
-					if (direction === 'up') {
+					if (direction === "up") {
 						if (activeCellIndex > 0) {
-							[cells[activeCellIndex], cells[activeCellIndex - 1]] = [
+							[
+								cells[activeCellIndex],
+								cells[activeCellIndex - 1],
+							] = [
 								cells[activeCellIndex - 1],
 								cells[activeCellIndex],
 							];
@@ -832,9 +851,12 @@ export const useNotebookStore = create<INotebookStore>()(
 								activeCellIndex: activeCellIndex - 1,
 							}));
 						}
-					} else if (direction === 'down') {
+					} else if (direction === "down") {
 						if (activeCellIndex < cells.length - 1) {
-							[cells[activeCellIndex], cells[activeCellIndex + 1]] = [
+							[
+								cells[activeCellIndex],
+								cells[activeCellIndex + 1],
+							] = [
 								cells[activeCellIndex + 1],
 								cells[activeCellIndex],
 							];
@@ -849,25 +871,25 @@ export const useNotebookStore = create<INotebookStore>()(
 					index: number,
 					source?: string,
 					type?: ICellTypes,
-					mode: NotebookMode = 'command',
+					mode: NotebookMode = "command",
 					group: string | undefined = undefined,
-					user: 'user' | 'assistant' = 'assistant',
-					action: string | undefined = undefined
+					user: "user" | "assistant" = "assistant",
+					action: string | undefined = undefined,
 				) => {
 					if (
-						type != 'code' &&
-						type != 'markdown' &&
-						type != 'rawNB' &&
+						type != "code" &&
+						type != "markdown" &&
+						type != "rawNB" &&
 						type != undefined
 					) {
 						// Do not allow another type of string to be defined
-						type = 'markdown';
+						type = "markdown";
 					}
 
 					const newCell: ICell = {
 						...createNewCell(),
-						source: source || '',
-						cell_type: type || 'code',
+						source: source || "",
+						cell_type: type || "code",
 						metadata: {
 							thread: {
 								group: group || undefined,
@@ -878,9 +900,11 @@ export const useNotebookStore = create<INotebookStore>()(
 					};
 
 					// Splice edits the array inplace
-					const newCells = [...get().cells.map((cell) => ({ ...cell }))];
+					const newCells = [
+						...get().cells.map((cell) => ({ ...cell })),
+					];
 					newCells.splice(index, 0, newCell);
-					trackEventData('[NOTEBOOK] Added cell at index', {
+					trackEventData("[NOTEBOOK] Added cell at index", {
 						cellType: newCell.cell_type,
 						index: index,
 					});
@@ -904,7 +928,10 @@ export const useNotebookStore = create<INotebookStore>()(
 				setNotebookMode: (newType: NotebookMode) => {
 					set({ notebookMode: newType });
 				},
-				setMarkdownCellRendered: (cellId: string, rendered: boolean) => {
+				setMarkdownCellRendered: (
+					cellId: string,
+					rendered: boolean,
+				) => {
 					// update markdown cell to rendered: true
 					set((state) => {
 						const newCells = [...state.cells];
@@ -924,7 +951,7 @@ export const useNotebookStore = create<INotebookStore>()(
 					});
 				},
 				executeAllCells: async () => {
-					trackEventData('[NOTEBOOK] Execute all cells', {
+					trackEventData("[NOTEBOOK] Execute all cells", {
 						cellLength: get().cells.length,
 					});
 					get().cells.map((cell, _) => {
@@ -951,29 +978,35 @@ export const useNotebookStore = create<INotebookStore>()(
 					const { cell_type, source, outputs } = cell;
 
 					if (!connectionManager || !connectionManager.kernel) {
-						useConnectionManagerStore.getState().openKernelSelectionModal();
+						useConnectionManagerStore
+							.getState()
+							.openKernelSelectionModal();
 					}
 
 					const alreadyExecuting = executingCells.has(cellId);
 					if (alreadyExecuting) {
 						// Debounce multiple requests to execute
-						console.warn('Tried to execute an already executing cell');
+						console.warn(
+							"Tried to execute an already executing cell",
+						);
 						return Promise.resolve();
 					}
 
-					trackEventData('[NOTEBOOK] Cell executed');
+					trackEventData("[NOTEBOOK] Cell executed");
 
 					// TODO: Run the active cell, add the ability to run selected cells soon
 					// Only call the kernel if the code is non-empty (or there's an output that can be cleared).
 					if (
-						cell_type === 'code' &&
+						cell_type === "code" &&
 						(source.length > 0 || (outputs as IOutput[]).length > 0)
 					) {
-						return connectionManager.kernel?.execute([cellId]).then(() => {
-							// Refresh the files after each execution
-							refreshFiles(path, true);
-						});
-					} else if (cell_type === 'markdown') {
+						return connectionManager.kernel
+							?.execute([cellId])
+							.then(() => {
+								// Refresh the files after each execution
+								refreshFiles(path, true);
+							});
+					} else if (cell_type === "markdown") {
 						const { setMarkdownCellRendered } = get();
 						setMarkdownCellRendered(cellId, true);
 						enableCommandMode();
@@ -987,7 +1020,7 @@ export const useNotebookStore = create<INotebookStore>()(
 					// Run the current cell add proceed to the next (or create a new one).
 					get().executeSelectedCells();
 
-					trackEventData('[NOTEBOOK] execute cell and advance');
+					trackEventData("[NOTEBOOK] execute cell and advance");
 
 					// If this is the last cell, add a new one.
 					if (activeCellIndex === cells.length - 1) {
@@ -1005,33 +1038,44 @@ export const useNotebookStore = create<INotebookStore>()(
 				createNewNotebook: async (
 					kernelSelection: string,
 					router: AppRouterInstance,
-					pathname: string
+					pathname: string,
 				) => {
 					try {
-						const connectionManager = ConnectionManager.getInstance();
+						const connectionManager =
+							ConnectionManager.getInstance();
 						await connectionManager.ready;
 						const newNotebook =
-							await connectionManager.serviceManager!.contents.newUntitled({
-								type: 'notebook',
-								path: get().path,
-							});
-						const fileContent = await connectionManager.getFileContents(
-							newNotebook.path
-						);
+							await connectionManager.serviceManager!.contents.newUntitled(
+								{
+									type: "notebook",
+									path: get().path,
+								},
+							);
+						const fileContent =
+							await connectionManager.getFileContents(
+								newNotebook.path,
+							);
 
-						const newSearchParams = new URLSearchParams(window.location.search);
-						newSearchParams.set('path', newNotebook.path);
+						const newSearchParams = new URLSearchParams(
+							window.location.search,
+						);
+						newSearchParams.set("path", newNotebook.path);
 						if (kernelSelection) {
-							newSearchParams.set('kernelSelection', kernelSelection);
+							newSearchParams.set(
+								"kernelSelection",
+								kernelSelection,
+							);
 						}
 
-						router?.push(`${pathname}?${newSearchParams.toString()}`);
+						router?.push(
+							`${pathname}?${newSearchParams.toString()}`,
+						);
 						return fileContent.content;
 					} catch (error) {
 						console.log(error);
 						standaloneToast({
-							title: 'Error creating new notebook',
-							status: 'error',
+							title: "Error creating new notebook",
+							status: "error",
 							duration: 3000,
 							isClosable: true,
 						});
@@ -1045,10 +1089,10 @@ export const useNotebookStore = create<INotebookStore>()(
 					router: AppRouterInstance,
 					pathname: string,
 					searchParams: URLSearchParams,
-					kernelSelection?: string
+					kernelSelection?: string,
 				): NotebookFile => {
 					set({ isLoadingNotebook: true });
-					trackEventData('[NOTEBOOK] selectedNotebook');
+					trackEventData("[NOTEBOOK] selectedNotebook");
 
 					const { setSelectedNotebook, setFileContents } = get();
 
@@ -1061,14 +1105,18 @@ export const useNotebookStore = create<INotebookStore>()(
 						sessionId: notebook.metadata?.thread?.sessionId,
 					});
 
-					const routerKernel = searchParams?.get('kernelSelection');
+					const routerKernel = searchParams?.get("kernelSelection");
 					if (kernelSelection && routerKernel === kernelSelection) {
 						// Construct a new URLSearchParams object from the current search parameters
-						const newSearchParams = new URLSearchParams(window.location.search);
-						newSearchParams.delete('kernelSelection');
+						const newSearchParams = new URLSearchParams(
+							window.location.search,
+						);
+						newSearchParams.delete("kernelSelection");
 
 						// Use router.push with a string URL, including the updated search parameters
-						router?.push(`${pathname}?${newSearchParams.toString()}`);
+						router?.push(
+							`${pathname}?${newSearchParams.toString()}`,
+						);
 					}
 
 					return notebook;
@@ -1078,7 +1126,7 @@ export const useNotebookStore = create<INotebookStore>()(
 					notebookFile: ThreadFile,
 					router: AppRouterInstance,
 					pathname: string,
-					searchParams: URLSearchParams
+					searchParams: URLSearchParams,
 				) => {
 					const { selectNotebook } = get();
 
@@ -1088,26 +1136,32 @@ export const useNotebookStore = create<INotebookStore>()(
 
 					const path = notebookFile.path;
 
-					const routerPath = searchParams?.get('path');
+					const routerPath = searchParams?.get("path");
 					// Convert null to undefined if kernelSelection is null
 					const kernelSelection =
-						searchParams?.get('kernelSelection') || undefined;
+						searchParams?.get("kernelSelection") || undefined;
 
 					if (routerPath !== path) {
 						// Construct a new URLSearchParams object from the current search parameters
-						const newSearchParams = new URLSearchParams(window.location.search);
-						newSearchParams.set('path', path);
+						const newSearchParams = new URLSearchParams(
+							window.location.search,
+						);
+						newSearchParams.set("path", path);
 
 						// Use router.push with a string URL, including the updated search parameters
-						router?.push(`${pathname}?${newSearchParams.toString()}`);
+						router?.push(
+							`${pathname}?${newSearchParams.toString()}`,
+						);
 					}
 
 					const notebookContents =
-						await ConnectionManager.getInstance().getFileContents(path);
+						await ConnectionManager.getInstance().getFileContents(
+							path,
+						);
 
 					selectNotebook(
 						notebookContents.content as NotebookFile,
-						kernelSelection
+						kernelSelection,
 					);
 
 					useNotebookStore.setState({
@@ -1121,7 +1175,8 @@ export const useNotebookStore = create<INotebookStore>()(
 				handleSave: async () => {
 					const saveNotebook = async () => {
 						const notebookPath = await get().getNotebookPath();
-						const connectionManager = ConnectionManager.getInstance();
+						const connectionManager =
+							ConnectionManager.getInstance();
 						if (
 							!notebookPath ||
 							!connectionManager ||
@@ -1133,7 +1188,7 @@ export const useNotebookStore = create<INotebookStore>()(
 						const fileContents = get().getFileContents();
 						if (!fileContents || !fileContents.cells) return;
 						const metadata = get().metadata;
-						const filePath = './' + get().getNotebookPath()!;
+						const filePath = "./" + get().getNotebookPath()!;
 
 						set(() => ({ isSaving: true }));
 
@@ -1147,21 +1202,26 @@ export const useNotebookStore = create<INotebookStore>()(
 								ConnectionManager.getInstance().serviceManager?.contents.save(
 									filePath,
 									{
-										type: 'notebook',
+										type: "notebook",
 										content: {
 											...get().fileContents,
 											cells: get().cells.map((cell) => {
-												if (cell.cell_type == 'markdown') {
+												if (
+													cell.cell_type == "markdown"
+												) {
 													delete cell.id;
 												}
 												return cell;
 											}),
 											metadata: get().metadata,
 										},
-									}
+									},
 								);
 							} catch (e) {
-								console.error('Error encountered while saving: ', e);
+								console.error(
+									"Error encountered while saving: ",
+									e,
+								);
 							}
 						}
 						set(() => ({ isSaving: false }));
@@ -1201,9 +1261,9 @@ export const useNotebookStore = create<INotebookStore>()(
 			equality(pastState, currentState) {
 				return pastState.cells.every(
 					(cell, index) => cell === currentState.cells[index],
-					currentState
+					currentState,
 				);
 			},
-		}
-	)
+		},
+	),
 );

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import useApiCallStore from "../../../../hooks/useApiCallStore";
-import ConnectionManager from "../../../../services/connection/connectionManager";
+import ConnectionManager from "@/services/connection/connectionManager";
 import { CHAT_PANEL_ID } from "../../../../utils/constants/constants";
 import { mostRelevantCellsForQuery } from "../../../../utils/embeddings";
 import { formatCellOutputs } from "../../../../utils/magic/messages";

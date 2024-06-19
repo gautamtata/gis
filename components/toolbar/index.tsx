@@ -1,4 +1,4 @@
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon } from "@chakra-ui/icons";
 import {
 	Badge,
 	Box,
@@ -10,29 +10,30 @@ import {
 	MenuList,
 	Text,
 	Tooltip,
-} from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import {
 	OllamaIcon,
 	OpenAIIcon,
 	PlayIcon,
 	SquareIcon,
-} from '../../assets/icons';
-import ConnectionManager from '../../services/connection/connectionManager';
-import { getCellTypesWithHandlers } from '../../utils/cellOptions';
-import { ICellTypes, useNotebookStore } from '../notebook/store/NotebookStore';
-import { triggerCellActionFailureToast } from '../toasts';
+} from "../../assets/icons";
+import ConnectionManager from "@/services/connection/connectionManager";
+import { getCellTypesWithHandlers } from "../../utils/cellOptions";
+import { ICellTypes, useNotebookStore } from "../notebook/store/NotebookStore";
+import { triggerCellActionFailureToast } from "../toasts";
 
 const RunModeSelector = () => {
-	const { executeSelectedCells, executeAllCells } = useNotebookStore.getState();
+	const { executeSelectedCells, executeAllCells } =
+		useNotebookStore.getState();
 	const executingCells = useNotebookStore((state) => state.executingCells);
-	const [toolbarMode, setToolbarMode] = useState('notebook');
+	const [toolbarMode, setToolbarMode] = useState("notebook");
 
 	useEffect(() => {
 		if (executingCells.size > 0) {
-			setToolbarMode('interrupt');
+			setToolbarMode("interrupt");
 		} else {
-			setToolbarMode('notebook');
+			setToolbarMode("notebook");
 		}
 	}, [executingCells]);
 
@@ -46,32 +47,32 @@ const RunModeSelector = () => {
 
 	return (
 		<ButtonGroup isAttached>
-			{toolbarMode === 'interrupt' ? (
+			{toolbarMode === "interrupt" ? (
 				<Button
-					size='sm'
-					leftIcon={<SquareIcon boxSize='9px' />}
-					variant='outline'
+					size="sm"
+					leftIcon={<SquareIcon boxSize="9px" />}
+					variant="outline"
 					onClick={handleInterruptClick}
-					backgroundColor='var(--chakra-colors-chakra-body-bg)'
-					fontFamily={'Space Grotesk'}
-					colorScheme='orange'
+					backgroundColor="var(--chakra-colors-chakra-body-bg)"
+					fontFamily={"Space Grotesk"}
+					colorScheme="orange"
 				>
 					Interrupt kernel
 				</Button>
 			) : (
 				<Tooltip
-					label='Execute all cells in this notebook'
+					label="Execute all cells in this notebook"
 					hasArrow
-					borderRadius={'md'}
+					borderRadius={"md"}
 				>
 					<Button
-						size='sm'
+						size="sm"
 						leftIcon={<PlayIcon />}
-						variant='outline'
+						variant="outline"
 						onClick={handleRunClick}
-						backgroundColor='var(--chakra-colors-chakra-body-bg)'
-						colorScheme='orange'
-						fontFamily={'Space Grotesk'}
+						backgroundColor="var(--chakra-colors-chakra-body-bg)"
+						colorScheme="orange"
+						fontFamily={"Space Grotesk"}
 					>
 						Run all cells
 					</Button>
@@ -84,72 +85,73 @@ const RunModeSelector = () => {
 export default function Toolbar() {
 	const getHandler = (type: ICellTypes) => {
 		return () => {
-			const { addCellAtIndex, activeCellIndex } = useNotebookStore.getState();
-			addCellAtIndex(activeCellIndex + 1, '', type as ICellTypes);
+			const { addCellAtIndex, activeCellIndex } =
+				useNotebookStore.getState();
+			addCellAtIndex(activeCellIndex + 1, "", type as ICellTypes);
 		};
 	};
 
 	const menuItems = getCellTypesWithHandlers({
-		code: getHandler('code'),
-		markdown: getHandler('markdown'),
+		code: getHandler("code"),
+		markdown: getHandler("markdown"),
 	});
 
 	return (
 		<Box
-			alignItems={'flex-end'}
-			paddingY='4'
-			position='absolute'
-			zIndex='10'
-			width='80%'
+			alignItems={"flex-end"}
+			paddingY="4"
+			position="absolute"
+			zIndex="10"
+			width="80%"
 			top={0}
-			maxWidth='1200px'
-			mx='auto'
+			maxWidth="1200px"
+			mx="auto"
 		>
-			<HStack justifyContent={'space-between'} width={'100%'}>
+			<HStack justifyContent={"space-between"} width={"100%"}>
 				<HStack gap={2}></HStack>
 				<HStack>
 					<RunModeSelector />
 					<Menu>
 						<Tooltip
 							hasArrow
-							fontSize='sm'
-							borderRadius={'md'}
-							placement='bottom'
-							label={'Insert a Python cell below (B)'}
+							fontSize="sm"
+							borderRadius={"md"}
+							placement="bottom"
+							label={"Insert a Python cell below (B)"}
 						>
 							<Button
-								aria-label='Add Python cell'
-								size='sm'
+								aria-label="Add Python cell"
+								size="sm"
 								leftIcon={
 									<HStack>
-										<AddIcon boxSize='10px' />
+										<AddIcon boxSize="10px" />
 									</HStack>
 								}
-								variant='outline'
-								backgroundColor='var(--chakra-colors-chakra-body-bg)'
-								onClick={getHandler('code')}
-								colorScheme='orange'
-								fontFamily={'Space Grotesk'}
+								variant="outline"
+								backgroundColor="var(--chakra-colors-chakra-body-bg)"
+								onClick={getHandler("code")}
+								colorScheme="orange"
+								fontFamily={"Space Grotesk"}
 							>
 								Python
 							</Button>
 						</Tooltip>
 						<Tooltip
 							hasArrow
-							fontSize='sm'
-							borderRadius={'md'}
-							placement='bottom'
-							label={'Insert a Markown cell below'}
+							fontSize="sm"
+							borderRadius={"md"}
+							placement="bottom"
+							label={"Insert a Markown cell below"}
 						>
 							<Button
-								aria-label='Add markdown cell'
-								size='sm'
-								leftIcon={<AddIcon boxSize='10px' />}
-								variant='outline'
-								backgroundColor='var(--chakra-colors-chakra-body-bg)'
-								onClick={getHandler('markdown')}
-								colorScheme='orange'
-								fontFamily={'Space Grotesk'}
+								aria-label="Add markdown cell"
+								size="sm"
+								leftIcon={<AddIcon boxSize="10px" />}
+								variant="outline"
+								backgroundColor="var(--chakra-colors-chakra-body-bg)"
+								onClick={getHandler("markdown")}
+								colorScheme="orange"
+								fontFamily={"Space Grotesk"}
 							>
 								Markdown
 							</Button>
@@ -161,15 +163,18 @@ export default function Toolbar() {
 										key={`add-cell-button-${label}`}
 										icon={icon}
 										onClick={() => {
-											const { isGeneratingCells } = useNotebookStore.getState();
+											const { isGeneratingCells } =
+												useNotebookStore.getState();
 											if (isGeneratingCells) {
-												triggerCellActionFailureToast('addition');
+												triggerCellActionFailureToast(
+													"addition",
+												);
 												return;
 											}
 											handler();
 										}}
 									>
-										<Text fontSize='small'>{label}</Text>
+										<Text fontSize="small">{label}</Text>
 									</MenuItem>
 								);
 							})}

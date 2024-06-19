@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { HotkeysEvent } from "react-hotkeys-hook/dist/types";
-import ConnectionManager from "../../../services/connection/connectionManager";
+import ConnectionManager from "@/services/connection/connectionManager";
 import {
 	enableCommandMode,
 	enableEditMode,

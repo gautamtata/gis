@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { Contents } from "@jupyterlab/services";
 import React, { useEffect, useState } from "react";
-import ConnectionManager from "../../../services/connection/connectionManager";
+import ConnectionManager from "@/services/connection/connectionManager";
 import { standaloneToast } from "../../../theme";
 import type { PreviewData } from "../../file/renderers";
 import { FilePreview } from "../../file/renderers";
