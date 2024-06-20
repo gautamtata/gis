@@ -81,12 +81,22 @@ export function GoToActiveCell({
 	};
 
 	useEffect(() => {
-		if (!mainPanelRef.current) return;
+		if (!mainPanelRef.current) {
+			console.log("mainPanelRef.current is not defined");
+			return;
+		}
+		console.log("Adding event listeners for 'click' and 'scroll'");
 		mainPanelRef.current.addEventListener("click", checkCellPosition);
 		mainPanelRef.current.addEventListener("scroll", checkCellPosition);
 
 		return () => {
-			if (!mainPanelRef.current) return;
+			if (!mainPanelRef.current) {
+				console.log(
+					"mainPanelRef.current is not defined during cleanup",
+				);
+				return;
+			}
+			console.log("Removing event listeners for 'click' and 'scroll'");
 			mainPanelRef.current.removeEventListener(
 				"click",
 				checkCellPosition,
@@ -209,6 +219,12 @@ export const MagicInput = ({
 
 	useEffect(() => {
 		// Primary hook to keep updating the available actions
+		console.log("useEffect triggered");
+		console.log("notebookMode:", notebookMode);
+		console.log("activeCellIndex:", activeCellIndex);
+		console.log("cellState.status:", cellState.status);
+		console.log("selectedCode:", selectedCode);
+
 		useMagicInputStore.getState().updateStore(notebookMode, cellState);
 	}, [notebookMode, activeCellIndex, cellState.status, selectedCode]);
 
