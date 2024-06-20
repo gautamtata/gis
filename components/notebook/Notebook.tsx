@@ -130,7 +130,6 @@ export const MainPanel = () => {
 	);
 	const activeCellIndex = useNotebookStore((state) => state.activeCellIndex);
 	const fileContents = useNotebookStore((state) => state.fileContents);
-	const cells = useNotebookStore((state) => state.cells);
 
 	useEffect(() => {
 		if (isLoadingNotebook) return;

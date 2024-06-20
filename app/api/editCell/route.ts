@@ -6,8 +6,8 @@ import { FunctionDefinition } from "openai/resources/shared";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 import { v4 as uuidv4 } from "uuid";
 import { LangfuseClient, captureOpenAIStream } from "@/utils/_shared/langfuse";
-import { ModelInformation, getModelForRequest } from "@/utils/_shared/model";
-import { getOpenAIClient } from "@/utils/_shared/openai";
+
+import OpenAI from "openai";
 import { getThemePrompt } from "@/utils/_shared/promptUtils";
 
 /* This is required to use OpenAIStream. */
@@ -31,7 +31,7 @@ export const CELL_EDIT_FUNCTION: FunctionDefinition = {
     },
 };
 
-export default async function handler(req: Request, res: NextApiResponse) {
+export async function POST(req: Request, res: NextApiResponse) {
     if (req.method === "POST") {
         const {
             userRequest,
@@ -39,14 +39,13 @@ export default async function handler(req: Request, res: NextApiResponse) {
             currentNamespace,
             theme,
             uniqueId,
-            modelInformation,
         } = (await req.json()) as {
             userRequest?: string;
             currentCellSource?: string;
             currentNamespace?: string;
             theme: "dark" | "light";
             uniqueId?: string;
-            modelInformation?: ModelInformation;
+
         };
 
         const context = {
@@ -82,11 +81,11 @@ ${themePrompt}`,
             },
         ];
 
-        const openai = getOpenAIClient(modelInformation);
-        const model = getModelForRequest(modelInformation);
+        const openai = new OpenAI();
+
 
         try {
-            const model = getModelForRequest(modelInformation);
+            const model = "gpt-4o"
             const trace = LangfuseClient.getInstance().trace({
                 id: uuidv4(),
                 name: `editCell`,
@@ -100,7 +99,7 @@ ${themePrompt}`,
             });
 
             const response = await openai.chat.completions.create({
-                model: model,
+                model: "gpt-4o",
                 messages: messages,
                 temperature: 0.3,
                 tools: [{ type: "function", function: CELL_EDIT_FUNCTION }],
@@ -109,6 +108,7 @@ ${themePrompt}`,
                     function: { name: CELL_EDIT_FUNCTION_NAME },
                 },
                 stream: true,
+
             });
 
             const stream = captureOpenAIStream(response, trace, generation);

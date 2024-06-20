@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
-import useApiCallStore from "../../../../hooks/useApiCallStore";
 import ConnectionManager from "@/services/connection/connectionManager";
 import { CHAT_PANEL_ID } from "../../../../utils/constants/constants";
 import { mostRelevantCellsForQuery } from "../../../../utils/embeddings";
@@ -121,14 +120,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 		useSidebarStore.getState().setPanelType(CHAT_PANEL_ID);
 
 		addMessage(query, "user");
-
-		const shouldContinue = useApiCallStore
-			.getState()
-			.checkAndIncrementApiCallCount();
-
-		if (!shouldContinue) {
-			return;
-		}
 
 		const { activeCellIndex, cells } = useNotebookStore.getState();
 		const activeCellSource = cells[activeCellIndex]?.source as string;

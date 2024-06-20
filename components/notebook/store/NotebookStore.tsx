@@ -7,7 +7,6 @@ import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.
 import { v4 as uuidv4 } from "uuid";
 import { temporal } from "zundo";
 import { create } from "zustand";
-import useApiCallStore from "../../../hooks/useApiCallStore";
 import ConnectionManager, {
 	useConnectionManagerStore,
 } from "@/services/connection/connectionManager";
@@ -485,14 +484,6 @@ export const useNotebookStore = create<INotebookStore>()(
 					});
 
 					trackEventData("[MagicQuery] submitted");
-
-					const shouldContinue = useApiCallStore
-						.getState()
-						.checkAndIncrementApiCallCount();
-
-					if (!shouldContinue) {
-						return;
-					}
 
 					try {
 						await magicQuery(prompt);

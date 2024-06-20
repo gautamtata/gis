@@ -29,14 +29,6 @@ export const SettingsContent = ({
 		background: hoverBackgroundColor,
 	};
 
-	const handleModelSettingsOpen = () => {
-		useSettingsStore.getState().setShowModelSettingsModal(true);
-	};
-
-	const handleServerSettingsOpen = () => {
-		useSettingsStore.getState().setShowServerSettingsModal(true);
-	};
-
 	return (
 		<VStack width="100%" height="100%" gap={3}>
 			<HStack
@@ -62,44 +54,6 @@ export const SettingsContent = ({
 				/>
 			</HStack>
 			<VStack width="100%" gap={2}>
-				<HStack
-					as={"button"}
-					width="100%"
-					padding={"12px"}
-					_hover={hoverStyles}
-					onClick={handleServerSettingsOpen}
-					display={"flex"}
-					flex="0 0 auto"
-					justifyContent={"space-between"}
-				>
-					<Heading
-						fontSize="smaller"
-						fontWeight={"600"}
-						fontFamily={"Space Grotesk"}
-					>
-						Server Settings
-					</Heading>
-					<ServerIcon mr={2} boxSize="15px" />
-				</HStack>
-				<HStack
-					as={"button"}
-					width="100%"
-					padding={"12px"}
-					_hover={hoverStyles}
-					onClick={handleModelSettingsOpen}
-					display={"flex"}
-					flex="0 0 auto"
-					justifyContent={"space-between"}
-				>
-					<Heading
-						fontSize="smaller"
-						fontWeight={"600"}
-						fontFamily={"Space Grotesk"}
-					>
-						Model Settings
-					</Heading>
-					<BrainIcon mr={2} boxSize="15px" />
-				</HStack>
 				<HStack
 					as="button"
 					width="100%"

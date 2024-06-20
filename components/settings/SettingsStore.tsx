@@ -62,23 +62,18 @@ const ensureSettingsExists = async () => {
 type ModelType = "openai" | "ollama";
 
 interface SettingsState {
-	showModelSettingsModal: boolean;
-	showServerSettingsModal: boolean;
 	openAIKey: string;
 	openAIBaseUrl: string;
 	serverProxyUrl: string;
-	ollamaUrl: string;
-	ollamaModel: string;
+
 	modelType: ModelType;
 	autoExecuteGeneratedCode: boolean;
-	setShowModelSettingsModal: (show: boolean) => void;
-	setShowServerSettingsModal: (show: boolean) => void;
+
 	setOpenAIKey: (key: string) => void;
 	setOpenAIBaseUrl: (url: string) => void;
 	setServerProxyUrl: (url: string) => void;
 	getServerProxyUrl: () => string;
-	setOllamaUrl: (url: string) => void;
-	setOllamaModel: (model: string) => void;
+
 	setModelType: (type: ModelType) => void;
 	fetchSettings: () => Promise<void>;
 	setSettings: (settings: Partial<SettingsState>) => Promise<void>;
@@ -88,18 +83,13 @@ interface SettingsState {
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
-	showModelSettingsModal: false,
-	showServerSettingsModal: false,
 	autoExecuteGeneratedCode: false,
 	openAIKey: "",
 	openAIBaseUrl: "",
 	serverProxyUrl: "",
-	ollamaUrl: "",
-	ollamaModel: "",
+
 	modelType: "openai",
-	setShowModelSettingsModal: (show) => set({ showModelSettingsModal: show }),
-	setShowServerSettingsModal: (show: boolean) =>
-		set({ showServerSettingsModal: show }),
+
 	setOpenAIKey: (key) => {
 		set({ openAIKey: key });
 		get().saveSettings({ openAIKey: key });
@@ -119,14 +109,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 		}
 		return serverProxyUrl;
 	},
-	setOllamaUrl: (url) => {
-		set({ ollamaUrl: url });
-		get().saveSettings({ ollamaUrl: url });
-	},
-	setOllamaModel: (model) => {
-		set({ ollamaModel: model });
-		get().saveSettings({ ollamaModel: model });
-	},
+
 	setModelType: (type) => {
 		set({ modelType: type });
 		get().saveSettings({ modelType: type });
@@ -149,8 +132,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 					openAIKey: fileContent.openAIKey || "",
 					openAIBaseUrl: fileContent.openAIBaseUrl || "",
 					serverProxyUrl: fileContent.serverProxyUrl || "",
-					ollamaUrl: fileContent.ollamaUrl || "",
-					ollamaModel: fileContent.ollamaModel || "",
+
 					modelType: fileContent.modelType || "openai",
 				});
 			} catch (error) {
@@ -189,8 +171,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 			modelInformation: {
 				openAIKey: get().openAIKey,
 				openAIBaseUrl: get().openAIBaseUrl,
-				ollamaUrl: get().ollamaUrl,
-				ollamaModel: get().ollamaModel,
+
 				modelType: get().modelType,
 			},
 			uniqueId: useConnectionManagerStore.getState().uniqueId,
@@ -221,15 +202,10 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 				openAIBaseUrl: prevSettings.openAIBaseUrl || "",
 				openAIKey: prevSettings.openAIKey || "",
 				serverProxyUrl: prevSettings.serverProxyUrl || "",
-				ollamaUrl: prevSettings.ollamaUrl || "",
-				ollamaModel: prevSettings.ollamaModel || "",
 				modelType: prevSettings.modelType || "openai",
 				autoExecuteGeneratedCode:
 					prevSettings.autoExecuteGeneratedCode || false,
-				showModelSettingsModal:
-					prevSettings.showModelSettingsModal || false,
-				showServerSettingsModal:
-					prevSettings.showServerSettingsModal || false,
+
 				...newSettings,
 			};
 
