@@ -338,7 +338,7 @@ const generateCells = async (query: string, followUpRetries: number) => {
 			break;
 		}
 		const fetchAction = await threadFetch(
-			`${getServerProxyUrl()}/api/magic/actions/action`,
+			`/api/action`,
 			{
 				method: "POST",
 				headers: {

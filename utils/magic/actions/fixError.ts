@@ -1,8 +1,7 @@
-import { useSettingsStore } from "@/components/settings/SettingsStore";
 import { ActionState } from "../magicQuery";
 import { sharedAction } from "./shared/utils";
 
-const { getServerProxyUrl } = useSettingsStore.getState();
+
 
 export async function* fixErrorAction(
 	actionState: ActionState,
@@ -11,7 +10,7 @@ export async function* fixErrorAction(
 	yield* sharedAction(
 		actionState,
 		wasAborted,
-		`${getServerProxyUrl()}/api/fixError`,
+		`/api/fixErrors`,
 		"code",
 	);
 }
