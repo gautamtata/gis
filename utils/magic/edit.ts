@@ -9,7 +9,7 @@ import { mostRelevantCellsForQuery } from "../embeddings";
 import { makeStreamingFunctionRequest } from "../streaming";
 import { getAppTheme, multilineStringToString } from "../utils";
 
-const { getServerProxyUrl } = useSettingsStore.getState();
+
 
 export const editCell = async (cell: ThreadCell, query: string) => {
 	const setPreviousQuery = useCellStore.getState().setPreviousQuery;
@@ -17,7 +17,7 @@ export const editCell = async (cell: ThreadCell, query: string) => {
 	const setCellStatus = useCellStore.getState().setCellStatus;
 	setCellStatus(cell.id as string, CellStatus.Generating);
 	const stream = makeStreamingFunctionRequest({
-		url: `${getServerProxyUrl()}/api/editCell`,
+		url: `/api/editCell`,
 		method: "POST",
 		payload: {
 			userRequest: query,

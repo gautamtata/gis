@@ -6,7 +6,7 @@ import {
 	LangfuseGenerationClient,
 	LangfuseTraceClient,
 } from "langfuse";
-import { ChatCompletionChunk } from "openai/resources";
+import { ChatCompletionChunk } from "openai/resources/chat/completions"
 import { Stream } from "openai/streaming";
 import { ActionState } from "@/types/messages";
 
