@@ -53,9 +53,8 @@ const CellHeaderActions = ({ cell }: { cell: ICell }) => {
 	const getShortcutKey = () => (isPlatformMac() ? "⌘" : "Ctrl");
 
 	useEffect(() => {
-		// Define the keydown event handler
+		console.log("PythonCell useEffect triggered", { cellId, cellState });
 		const handleDocumentKeyDown = (event: KeyboardEvent) => {
-			// Do not process if the cell state is follow up
 			if (cellState?.status !== CellStatus.FollowUp) return;
 
 			if (event.key === "Enter" && event.metaKey && event.shiftKey) {
@@ -76,10 +75,8 @@ const CellHeaderActions = ({ cell }: { cell: ICell }) => {
 			}
 		};
 
-		// Add the keydown event listener to the document
 		document.addEventListener("keydown", handleDocumentKeyDown);
 
-		// Clean up the event listener on unmount
 		return () => {
 			document.removeEventListener("keydown", handleDocumentKeyDown);
 		};

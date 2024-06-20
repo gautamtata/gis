@@ -41,7 +41,7 @@ export const getSelectedCode = (
 export const onChangePlugin = (finalOnChange: (code: string) => void) =>
 	ViewPlugin.fromClass(
 		class {
-			constructor() {}
+			constructor() { }
 
 			update(update: ViewUpdate) {
 				if (update.docChanged) {
@@ -73,9 +73,13 @@ export function useExtensionWithDependency(
 
 	useEffect(() => {
 		if (view) {
+			console.log("useEffect triggered in useExtensionWithDependency, view exists: ", view);
 			view.dispatch({
 				effects: compartment.reconfigure(extensionFactory()),
 			});
+			console.log("Dispatched reconfiguration of extensionFactory");
+		} else {
+			console.log("useEffect triggered in useExtensionWithDependency, but view does not exist");
 		}
 	}, deps);
 

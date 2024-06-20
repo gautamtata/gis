@@ -1,34 +1,34 @@
-import { Box, HStack, VStack, useColorModeValue } from '@chakra-ui/react';
-import { markdown } from '@codemirror/lang-markdown';
-import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
-import CodeMirror, { ReactCodeMirrorRef, keymap } from '@uiw/react-codemirror';
-import 'katex/dist/katex.min.css';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Markdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-import remarkBreaks from 'remark-breaks';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
+import { Box, HStack, VStack, useColorModeValue } from "@chakra-ui/react";
+import { markdown } from "@codemirror/lang-markdown";
+import { hyperLink } from "@uiw/codemirror-extensions-hyper-link";
+import CodeMirror, { ReactCodeMirrorRef, keymap } from "@uiw/react-codemirror";
+import "katex/dist/katex.min.css";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkBreaks from "remark-breaks";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import {
 	CELL_ACTIVE_COLOR,
 	CELL_MINIMUM_HEIGHT,
-} from '../../utils/constants/constants';
-import { getCustomMarkdownComponents } from '../../utils/markdown';
+} from "../../utils/constants/constants";
+import { getCustomMarkdownComponents } from "../../utils/markdown";
 import {
 	getThreadCellMetadata,
 	multilineStringToString,
-} from '../../utils/utils';
+} from "../../utils/utils";
 import {
 	MarkdownCell as MarkdownCellType,
 	useNotebookStore,
-} from '../notebook/store/NotebookStore';
-import { jupyterLabKeymap } from './input/keymap';
-import { jupyterTheme } from './input/theme';
+} from "../notebook/store/NotebookStore";
+import { jupyterLabKeymap } from "./input/keymap";
+import { jupyterTheme } from "./input/theme";
 
-import { useRouter } from 'next/navigation';
-import rehypeKatex from 'rehype-katex';
-import CellPadding from './CellPadding';
-import InputAreaToolbar from './input/InputAreaToolbar';
+import { useRouter } from "next/navigation";
+import rehypeKatex from "rehype-katex";
+import CellPadding from "./CellPadding";
+import InputAreaToolbar from "./input/InputAreaToolbar";
 
 interface CellContainerProps {
 	active: boolean;
@@ -59,8 +59,8 @@ const MarkdownCell = ({
 	const cellRef = useRef<HTMLDivElement>(null);
 	const cmRef = useRef<ReactCodeMirrorRef>(null);
 	const defaultBorderColor = useColorModeValue(
-		'var(--jp-border-color2)',
-		'var(--jp-border-color0)'
+		"var(--jp-border-color2)",
+		"var(--jp-border-color0)",
 	);
 
 	const onChange = (updatedCode: string) => {
@@ -69,6 +69,7 @@ const MarkdownCell = ({
 	};
 
 	useEffect(() => {
+		console.log("useEffect triggered", { active, rendered, isBeingEdited });
 		const { setMarkdownCellRendered } = useNotebookStore.getState();
 		if (rendered === true && isBeingEdited) {
 			setMarkdownCellRendered(cellId, false);
@@ -95,34 +96,34 @@ const MarkdownCell = ({
 		<Box
 			ref={cellRef}
 			minHeight={`${CELL_MINIMUM_HEIGHT}px`}
-			flex='1'
-			overflow='auto'
+			flex="1"
+			overflow="auto"
 			tabIndex={1}
 			border={
 				rendered
 					? isBeingEdited
 						? `3px solid ${defaultBorderColor}`
 						: source && source.length > 0
-						? '3px solid transparent'
-						: '3px dashed var(--jp-layout-color1)'
+						? "3px solid transparent"
+						: "3px dashed var(--jp-layout-color1)"
 					: isBeingEdited
 					? `3px solid ${CELL_ACTIVE_COLOR}`
 					: `3px solid ${defaultBorderColor}`
 			}
-			width={'100%'}
+			width={"100%"}
 			onClick={() => {}}
 		>
 			{rendered ? (
 				<Box
 					border={
 						active
-							? '1px dashed var(--jp-border-color2)'
+							? "1px dashed var(--jp-border-color2)"
 							: hovered
-							? '1px dashed var(--jp-border-color2)'
-							: '1px dashed transparent'
+							? "1px dashed var(--jp-border-color2)"
+							: "1px dashed transparent"
 					}
-					height={'100%'}
-					cursor={hovered ? 'pointer' : undefined}
+					height={"100%"}
+					cursor={hovered ? "pointer" : undefined}
 					onMouseEnter={() => setIsHovering(true)}
 					onMouseLeave={() => setIsHovering(false)}
 					px={2.5}
@@ -138,22 +139,22 @@ const MarkdownCell = ({
 				</Box>
 			) : (
 				<HStack
-					width='100%'
-					overflow='auto'
+					width="100%"
+					overflow="auto"
 					gap={0}
 					tabIndex={0}
-					alignItems={'flex-start'}
-					height='100%'
-					backgroundColor={'var(--jp-layout-color1)'}
-					position='relative'
+					alignItems={"flex-start"}
+					height="100%"
+					backgroundColor={"var(--jp-layout-color1)"}
+					position="relative"
 				>
 					<CodeMirror
 						ref={cmRef}
-						className='cell-editor'
+						className="cell-editor"
 						style={{
-							fontFamily: 'monospace',
-							overflow: 'auto',
-							width: '100%',
+							fontFamily: "monospace",
+							overflow: "auto",
+							width: "100%",
 						}}
 						autoFocus
 						value={source as string}
@@ -175,7 +176,7 @@ const MarkdownCell = ({
 						source={source}
 						index={index}
 						cmRef={cmRef}
-						type={'markdown'}
+						type={"markdown"}
 					/>
 				</HStack>
 			)}
@@ -190,33 +191,35 @@ const MarkdownCellContainer: React.FC<CellContainerProps> = ({
 	isBeingEdited,
 }) => {
 	const threadMetadata = getThreadCellMetadata(cell);
-	const isUserMessage = threadMetadata?.user === 'user';
+	const isUserMessage = threadMetadata?.user === "user";
 
 	return (
 		<VStack
-			width='100%'
+			width="100%"
 			gap={2}
-			height='100%'
+			height="100%"
 			pb={0}
 			m={0}
-			className={active ? 'active-cell' : 'markdown-cell'}
+			className={active ? "active-cell" : "markdown-cell"}
 		>
 			<HStack
-				width='100%'
+				width="100%"
 				gap={!isUserMessage ? 0 : 2}
-				overflow='auto'
+				overflow="auto"
 				borderLeft={
-					active ? `3px solid ${CELL_ACTIVE_COLOR}` : '3px solid transparent'
+					active
+						? `3px solid ${CELL_ACTIVE_COLOR}`
+						: "3px solid transparent"
 				}
-				position='relative'
+				position="relative"
 				onClick={() => {
 					const { setActiveCell, setNotebookMode } =
 						useNotebookStore.getState();
 					setActiveCell(cell.id as string);
-					setNotebookMode('edit');
+					setNotebookMode("edit");
 				}}
-				justifyContent={'center'}
-				alignItems={'stretch'}
+				justifyContent={"center"}
+				alignItems={"stretch"}
 			>
 				<CellPadding extraAdjustment={true} />
 				<MarkdownCell

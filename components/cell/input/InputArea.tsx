@@ -80,6 +80,10 @@ const InputArea = forwardRef<ReactCodeMirrorRef, InputAreaProps>(
 		};
 
 		useEffect(() => {
+			console.log("InputArea useEffect triggered", {
+				active,
+				isBeingEdited,
+			});
 			if (isBeingEdited) {
 				if (isInitial) {
 					cmRef.current?.view?.focus();
