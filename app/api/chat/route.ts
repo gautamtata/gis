@@ -8,8 +8,8 @@ import {
 } from "openai/resources/chat/completions";
 import { Stream } from "openai/streaming";
 import { ChatMessage } from "@/types/messages";
-import { ModelInformation, getModelForRequest } from "@/utils/_shared/model";
-import { getOpenAIClient } from "@/utils/_shared/openai";
+import OpenAI from "openai";
+
 import { getChatContextPrompt } from "@/utils/_shared/promptUtils";
 
 /* This is required to use OpenAIStream. */
@@ -90,7 +90,12 @@ const getMessagesPayload = ({
     return messages;
 };
 
-export default async function handler(req: Request, res: NextApiResponse) {
+
+export type ModelInformation = {
+    openAIKey?: string;
+    modelType?: string;
+};
+export async function POST(req: Request, res: NextApiResponse) {
     if (req.method === "POST") {
         const {
             query,
@@ -98,9 +103,7 @@ export default async function handler(req: Request, res: NextApiResponse) {
             currentChatContext,
             currentChatNamespace,
             activeCellSource,
-            modelInformation,
             mostRelevantContextualCellsForQuery,
-            uniqueId,
         } = (await req.json()) as {
             query: string;
             previousMessages: ChatMessage[];
@@ -112,8 +115,8 @@ export default async function handler(req: Request, res: NextApiResponse) {
             uniqueId?: string;
         };
 
-        const openai = getOpenAIClient(modelInformation);
-        const model = getModelForRequest(modelInformation);
+        const openai = new OpenAI();
+
 
         if (!query) {
             console.error("No message found in the request body");
@@ -132,7 +135,7 @@ export default async function handler(req: Request, res: NextApiResponse) {
         try {
             const response: Stream<ChatCompletionChunk> =
                 await openai.chat.completions.create({
-                    model: model,
+                    model: "gpt-4o",
                     messages: messages,
                     stream: true,
                 });

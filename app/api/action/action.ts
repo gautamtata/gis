@@ -5,8 +5,7 @@ import { FunctionDefinition } from "openai/resources/shared";
 import { ActionState } from "@/types/messages";
 import { createTraceAndGeneration } from "@/utils/_shared/langfuse";
 import { formatMessages } from "@/utils/_shared/message";
-import { ModelInformation, getModelForRequest } from "@/utils/_shared/model";
-import { getOpenAIClient } from "@/utils/_shared/openai";
+import OpenAI from "openai";
 
 enum ActionType {
     Code = "code",
@@ -183,14 +182,18 @@ const maskActions = (actionState: ActionState) => {
     return maskedActionFunction;
 };
 
-export default async function handler(
+type ModelInformation = {
+    openAIKey?: string;
+    modelType?: string;
+};
+
+export async function POST(
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
     if (req.method === "POST") {
         let {
             actionState,
-            modelInformation,
             uniqueId,
             autoExecuteGeneratedCode,
         }: {
@@ -222,11 +225,11 @@ Your instructions:
             maskedActionFunction.parameters!.properties as any
         ).action.oneOf.map((action: any) => action.properties.type.const);
 
-        const openai = getOpenAIClient(modelInformation);
-        const model = getModelForRequest(modelInformation);
+        const openai = new OpenAI()
+        const model = "gpt-4o"
 
         try {
-            const model = getModelForRequest();
+
             const { trace, generation } = createTraceAndGeneration(
                 "action",
                 actionState,
@@ -236,7 +239,7 @@ Your instructions:
             );
 
             const response = await openai.chat.completions.create({
-                model: model,
+                model: "gpt-4o",
                 messages: messages,
                 tools: [{ type: "function", function: maskedActionFunction }],
                 tool_choice: {

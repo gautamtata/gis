@@ -9,8 +9,7 @@ import {
     createTraceAndGeneration,
 } from "@/utils/_shared/langfuse";
 import { formatMessages } from "@/utils/_shared/message";
-import { ModelInformation, getModelForRequest } from "@/utils/_shared/model";
-import { getOpenAIClient } from "@/utils/_shared/openai";
+import OpenAI from "openai";
 
 export const CODE_FUNCTION_NAME = "code";
 export const CODE_FUNCTION: FunctionDefinition = {
@@ -40,7 +39,12 @@ export const CODE_FUNCTION: FunctionDefinition = {
 /* This is required to use OpenAIStream. */
 export const runtime = "edge";
 
-export default async function handler(req: Request, res: NextApiResponse) {
+export type ModelInformation = {
+    openAIKey?: string;
+    modelType?: string;
+};
+
+export async function POST(req: Request, res: NextApiResponse) {
     if (req.method === "POST") {
         const { actionState, uniqueId, modelInformation } =
             (await req.json()) as {
@@ -66,8 +70,8 @@ Your instructions:
         ];
 
         try {
-            const openai = getOpenAIClient(modelInformation);
-            const model = getModelForRequest(modelInformation);
+            const openai = new OpenAI()
+            const model = "gpt-4o"
 
             const { trace, generation } = createTraceAndGeneration(
                 "fixError",
