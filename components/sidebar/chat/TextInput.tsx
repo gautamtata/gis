@@ -20,7 +20,9 @@ export function DynamicTextArea({
 
 	useEffect(() => {
 		const { setTextInputRef } = useSidebarStore.getState();
+		console.log("Setting text input reference...");
 		setTextInputRef(textInputRef.current);
+		console.log("Text input reference set successfully.");
 	}, []);
 
 	const handleQuery = async (userQuery: string) => {

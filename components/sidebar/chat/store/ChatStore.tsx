@@ -5,7 +5,6 @@ import { CHAT_PANEL_ID } from "../../../../utils/constants/constants";
 import { mostRelevantCellsForQuery } from "../../../../utils/embeddings";
 import { formatCellOutputs } from "../../../../utils/magic/messages";
 import { makeStreamingRequest } from "../../../../utils/streaming";
-import { useSettingsStore } from "../../../settings/SettingsStore";
 import { useNotebookStore } from "../../../notebook/store/NotebookStore";
 import { useSidebarStore } from "../../store/SidebarStore";
 export type UserType = "assistant" | "user";
@@ -139,11 +138,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 				},
 			);
 
-			const { getServerProxyUrl } = useSettingsStore.getState();
-
 			let assistantMessageId;
 			const stream = makeStreamingRequest({
-				url: `${getServerProxyUrl()}/api/chat/assistant`,
+				url: `/api/chat`,
 				method: "POST",
 				payload: {
 					query,

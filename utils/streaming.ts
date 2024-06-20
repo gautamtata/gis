@@ -192,7 +192,10 @@ const useJsonStreaming = <T>({
 
 	useEffect(() => {
 		if (!manual) {
+			console.log("Running automatically as manual flag is not set.");
 			runAutomatically();
+		} else {
+			console.log("Not running automatically as manual flag is set.");
 		}
 	}, [url, payload, manual, runAutomatically]);
 
